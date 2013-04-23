@@ -1,0 +1,236 @@
+diff -r ToDoBackBone/app/assets/javascripts/application.js TodoAppDemo/app/assets/javascripts/application.js
+19c19
+< //= require_tree .
+\ No newline at end of file
+---
+> //= require_tree .
+Only in ToDoBackBone/app/assets/javascripts/collections: task.js
+Only in TodoAppDemo/app/assets/javascripts/collections: tasks.js
+diff -r ToDoBackBone/app/assets/javascripts/models/task.js TodoAppDemo/app/assets/javascripts/models/task.js
+0a1
+> // app/assets/javascripts/models/task.js
+4d4
+< 
+diff -r ToDoBackBone/app/assets/javascripts/routers/tasks_router.js TodoAppDemo/app/assets/javascripts/routers/tasks_router.js
+40c40
+< });
+\ No newline at end of file
+---
+> });
+diff -r ToDoBackBone/app/assets/javascripts/todo.js TodoAppDemo/app/assets/javascripts/todo.js
+8,9c8,9
+< 
+<   initialize: function (rootEl, tasksData) {
+---
+>   
+>   initialize: function ($sidebar, $content, tasksData) {
+11a12,13
+>     this.installSidebar($sidebar, tasks);
+>     
+13c15
+<     new TD.Routers.TasksRouter(rootEl, tasks);
+---
+>     new TD.Routers.TasksRouter($content, tasks);
+19,25c21,27
+< 	  var that = this;
+< 	  
+< 	  var tasksListView = new TD.Views.TasksListView({
+< 		  collection: tasks
+< 	  });
+< 	  
+< 	  $sidebar.html(tasksListView.render().$el);
+---
+>     var that = this;
+>     
+>     var tasksListView = new TD.Views.TasksListView({
+>       collection: tasks
+>     });
+>     
+>     $sidebar.html(tasksListView.render().$el);
+27,28c29
+<   
+< };
+\ No newline at end of file
+---
+> };
+diff -r ToDoBackBone/app/assets/javascripts/views/new_task_view.js TodoAppDemo/app/assets/javascripts/views/new_task_view.js
+0a1
+> // app/assets/javascript/views/new_task_view.js
+2,25c3,31
+< 	events: {
+< 		"click button.submit": "submit"
+< 	},
+< 	
+< 	render: function() {
+< 		var that = this;
+< 		
+< 		var renderedContent = JST["tasks/new"]();
+< 		that.$el.html(renderedContent);
+< 		return that;
+< 	},
+< 	
+< 	submit: function() {
+< 		var that = this;
+< 		
+< 		var task = new TD.Models.Task({
+< 			title: that.$("input[name=task\\[title\\]]").val()
+< 		});
+< 		
+< 		that.collection.add(task);
+< 		task.save();
+< 		Backbone.history.navigate("#/");
+< 	}
+< });
+\ No newline at end of file
+---
+>   events: {
+>     "click button.submit": "submit",
+>     "click button.cancel": "cancel"
+>   },
+>   
+>   render: function () {
+>     var that = this;
+>     
+>     var renderedContent = JST["tasks/new"]();
+>     that.$el.html(renderedContent);
+>     return that;
+>   },
+>   
+>   submit: function () {
+>     var that = this;
+>     
+>     var task = new TD.Models.Task({
+>       title: that.$("input[name=task\\[title\\]]").val()
+>     });
+>     
+>     that.collection.add(task);
+>     task.save();
+>     Backbone.history.navigate("#/");
+>   },
+>   
+>   cancel: function () {
+>     Backbone.history.navigate("#/");
+>   }
+> });
+diff -r ToDoBackBone/app/assets/javascripts/views/task_detail_view.js TodoAppDemo/app/assets/javascripts/views/task_detail_view.js
+13c13
+< });
+\ No newline at end of file
+---
+> });
+diff -r ToDoBackBone/app/assets/javascripts/views/tasks_list_view.js TodoAppDemo/app/assets/javascripts/views/tasks_list_view.js
+0a1
+> // app/assets/javascript/views/tasks_list_view.js
+2,15c3,17
+< 	
+< 	events: {
+< 		"click li.task": "showTask"
+< 	},
+< 	
+< 	initialize: function(){
+< 		var that = this;
+< 		var renderCallback = that.render.bind(that);
+< 		that.collection.on("add",renderCallback);
+< 		that.collection.on("change", renderCallback);
+< 		that.collection.on("remove", renderCallback);
+< 	},
+< 	
+< 	render: function(){
+---
+>   initialize: function () {
+>     var that = this;
+>     
+>     var renderCallback = that.render.bind(that);
+>     that.collection.on("add", renderCallback);
+>     that.collection.on("change", renderCallback);
+>     that.collection.on("remove", renderCallback);
+>   },
+>   
+>   render: function () {
+>     var that = this;
+>     
+>     var renderedContent = JST["tasks/list"]({
+>       tasks: that.collection
+>     });
+17,32c19,21
+< 		var that = this;
+< 		var renderedContent = JST["tasks/list"]({
+< 			tasks: that.collection
+< 		});
+< 		
+< 		that.$el.html(renderedContent);
+< 		return that;
+< 	},
+< 	
+< 	showTask: function(el) {
+< 		console.log(
+< 			"You clicked task#" +
+< 			$(el.target).attr("data-id") +
+< 			"! So good a click!"
+< 		);
+< 	}
+---
+>     that.$el.html(renderedContent);
+>     return that;
+>   }
+diff -r ToDoBackBone/app/assets/stylesheets/tasks.css.scss TodoAppDemo/app/assets/stylesheets/tasks.css.scss
+1c1
+< // Place all the styles related to the tasks controller here.
+---
+> // Place all the styles related to the Tasks controller here.
+diff -r ToDoBackBone/app/assets/templates/tasks/detail.jst.ejs TodoAppDemo/app/assets/templates/tasks/detail.jst.ejs
+1c1
+< 
+---
+> <!-- app/assets/templates/tasks/detail.jst.ejs -->
+5,7c5
+< 
+< You've got your work cut out for you!
+< 
+---
+>   You've got your work cut out for you!
+diff -r ToDoBackBone/app/assets/templates/tasks/list.jst.ejs TodoAppDemo/app/assets/templates/tasks/list.jst.ejs
+0a1
+> <!-- app/assets/templates/tasks/list.jst.ejs -->
+2,8c3,9
+< 	<% tasks.each(function (task) { %>
+< 	<li class="task" >
+< 	 <a href="#/tasks/<%= task.escape("id") %>">
+< 	  <%= task.escape("title")%>
+< 	  </a>
+< 	</li>
+< 	<% }); %> 
+---
+>   <% tasks.each(function (task) { %>
+>     <li class="task">
+>       <a href="#/tasks/<%= task.escape("id") %>">
+>         <%= task.escape("title")%>
+>       </a>
+>     </li>
+>   <% }); %>
+9a11,12
+> 
+> <a href="#/tasks/new">New Task!</a>
+diff -r ToDoBackBone/app/assets/templates/tasks/new.jst.ejs TodoAppDemo/app/assets/templates/tasks/new.jst.ejs
+0a1
+> <!-- app/assets/templates/new.jst.ejs -->
+2,9c3,11
+< 	<h1>New Task</h1>
+< 	<label for="task_title">
+< 	Title
+< 	<input name="task[title]" id="task_title">
+< 	</label>
+< 	
+< 	<button class="submit">Submit</button>
+< </div>
+\ No newline at end of file
+---
+>   <h1>New Task</h1>
+>   <label for="task_title">
+>     Title
+>     <input name="task[title]" id="task_title">
+>   </label>
+> 
+>   <button class="submit">Submit!</button>
+>   <button class="cancel">Cancel</button
+> </div>

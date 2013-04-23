@@ -1,0 +1,9 @@
+<script type="text/javascript">
+$(function (){
+	var tasksData = <%= Task.all.to_json.html_safe %>;
+	window.TD.initialize(
+	      $("#sidebar"),
+		  $("#content"),
+		  tasksData);
+	  });
+</script>

@@ -1,0 +1,14 @@
+<ul>
+<% articles.each(function(article) { %>
+	<li class="article">
+	
+	<a class="article-links" href="#/articles/<%= article.id %>">
+	<%= article.escape("title") %>
+	</a>
+	</li>
+<% }); %>
+
+<li>
+<a href="#/articles/new">New Entry</a>
+</li>
+</ul>
