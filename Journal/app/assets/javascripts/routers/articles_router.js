@@ -20,7 +20,13 @@ JA.Routers.ArticlesRouter = Backbone.Router.extend({
 	},
 	
 	new: function(){
+		var that = this;
 		
+		var newArticleView = new JA.Views.NewArticleView ({
+			collection: that.tasks
+		});
+		
+		that.$rootEl.html(newArticleView.render().$el);
 	},
 	
 	show: function(id) {

@@ -5,11 +5,6 @@ window.JA = {
 	Routers: {},
 	
 	initialize: function($sidebar, $content, articleData) {
-		// var articlesListView = new JA.Views.ArticlesListView({
-// 			collection: articles
-// 		});
-// 		
-// 		$(rootEl).html(articlesListView.render().$el);
 		var articles = new JA.Collections.Articles(articleData); 
 		
 		this.installSidebar($sidebar, articles);
